@@ -1,0 +1,60 @@
+1)
+
+A Clockwork Orange: String
+42: integer
+09/02/1945: date
+98.7: float
+15.99: float
+
+2)
+Database would be used when storing a lot of information that you need to
+access later. A database would allow you access certain data depending on
+what criteria you would want to look up.
+Text file might be used when the information you want to store is not
+a lot of data. Text files are better because they are not written in
+binary code written so humans can read them.
+
+3)
+One difference between SQL and other programming languages is declarative rather
+than a procedural language meaning queries don't specify steps to produce the
+result.
+
+4)
+Pieces of a database system fit together using columns and rows. Columns are
+labeled according to what is stored there. Rows make up the values or information
+in that column.
+
+5)
+Table: How the data is stored. Tables include rows and columns
+Column: define what the data represents
+Row: Make up a complete conceptual unit
+Value: Some piece of information that the column name describes
+
+6)
+- strings
+- dates
+- objects
+- float
+- integer
+
+7)
+a) return the date and amount from payments table
+b) return amount from payment table where amount is over 500
+c) return all columns from payments where the payee is "Mega Foods"
+
+8)
+
+a)
+SELECT email, signup
+FROM users
+WHERE name = 'DeAndre Data';
+
+b)
+SELECT userid,
+FROM users
+WHERE email = 'aleesia.algorithm@uw.edu';
+
+c)
+SELECT *
+FROM users
+WHERE userid = 4;
