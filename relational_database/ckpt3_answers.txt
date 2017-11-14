@@ -1,0 +1,11 @@
+1) Command for:
+   Adding is INSERT INTO table_name (row_name, row_name) VALUES
+   Updating is UPDATE table_name SET row_name=new_value
+   Deleting is DELETE FROM table_name WHERE condition
+
+2) I think the explanation for each command is in the answer to question 1
+
+3) Data types and real world examples:
+   int: 8
+   text: 'this is a text'
+   timestamp: '2013-03-13 19:06:00'
