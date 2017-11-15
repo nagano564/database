@@ -19,8 +19,7 @@
 
 5)
   a) createdb library postgres
-  b) CREATE TABLE books(isbn char(13), title text, author text, genre text, publishing_date date, number_of_copies integer, available_copie
-     s integer);
+  b) CREATE TABLE books(isbn char(13), title text, author text, genre text, publishing_date date, number_of_copies integer, available_copies integer);
   c) INSERT INTO books VALUES ('0-1234-3452-2', 'Javascript: The Good Parts','O'Reilly','Non-Fiction', '2008-05-01', 5, 2);
      INSERT INTO books VALUES ('0-7868-6841-4', 'Leadership', 'Rudolph Giuliani', 'Biography', '2002-10-01', 3, 3);
      INSERT INTO books VALUES ('0307947394', 'Forrest Gump', 'Winston Groom', 'Fiction', '2012-02-01', 5, 3);
@@ -28,3 +27,19 @@
   c) DELETE FROM books WHERE isbn='0307947394';
 
 6)
+  a) createdb space postgres
+  b) CREATE TABLE spaceships (id integer, name text, year_launched integer, country text, mission text, orbiting_body text, currently_orbiting boolean, miles_from_earth float);
+  c) INSERT INTO spaceships VALUES('1', 'Rocket', '1990', 'USA', 'Pictures of Mars', 'Mars', True, '239000.48');
+     INSERT INTO spaceships VALUES('2', 'Death Star', '1978', 'Russia', 'Destroy Earth', 'Moon', False, '23900.98');
+     INSERT INTO spaceships VALUES('3', 'Space Shuttle', '2016', 'Japan', 'Information on Venus', 'Venus', True, '23440000.03');
+  d) DELETE FROM spaceships WHERE orbiting_body='Moon';
+  e) UPDATE spaceships SET currently_orbiting='False' WHERE name='Rocket';
+
+7)
+  a) createdb emails postgres
+  b) CREATE TABLE inbox (id integer, subject_line text, sender text, additional_recipients text, body text, timestamp timestamp, read boolean, email_chain_id integer);
+  c) INSERT INTO inbox VALUES ('1', 'Party for Thanksgiving', 'nagano@gmail.com', 'julie@gmail.com', 'Lets party for thanksgiving', '2013-03-13 19:06:00', False, '3234');
+     INSERT INTO inbox VALUES ('3', 'Thank you', 'nagano12@gmail.com', 'None', 'Thank you for helping', '2016-05-23 12:34:00', True, '4321');
+     INSERT INTO inbox VALUES ('44', 'Hello there', 'nagano12@gmail.com', 'nagano@gmail.com', 'My name is Kenny. Nice to meet you', '2017-11-02 09:20:20', True, '984');
+  d) DELETE FROM inbox WHERE id='44';
+  e) UPDATE inbox SET read='False' WHERE read='True';
