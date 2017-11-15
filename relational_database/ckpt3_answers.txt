@@ -9,3 +9,22 @@
    int: 8
    text: 'this is a text'
    timestamp: '2013-03-13 19:06:00'
+
+4)
+  a) CREATE TABLE wedding(id integer, last_name text, first_name text, returned_rsvp boolean, total_guest integer, total_meals decimal);
+  b) ALTER TABLE wedding ADD COLUMN sent_thank_you boolean);
+  c) ALTER TABLE wedding DROP COLUMN total_meals;
+  d) ALTER TABLE wedding ADD COLUMN table_number integer;
+  e) DROP TABLE wedding
+
+5)
+  a) createdb library postgres
+  b) CREATE TABLE books(isbn char(13), title text, author text, genre text, publishing_date date, number_of_copies integer, available_copie
+     s integer);
+  c) INSERT INTO books VALUES ('0-1234-3452-2', 'Javascript: The Good Parts','O'Reilly','Non-Fiction', '2008-05-01', 5, 2);
+     INSERT INTO books VALUES ('0-7868-6841-4', 'Leadership', 'Rudolph Giuliani', 'Biography', '2002-10-01', 3, 3);
+     INSERT INTO books VALUES ('0307947394', 'Forrest Gump', 'Winston Groom', 'Fiction', '2012-02-01', 5, 3);
+  d) UPDATE books SET available_copies=1 WHERE isbn='0307947394';
+  c) DELETE FROM books WHERE isbn='0307947394';
+
+6)
