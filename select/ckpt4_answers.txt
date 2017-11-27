@@ -1,0 +1,34 @@
+1)
+  SELECT *
+  FROM inventory
+  WHERE id=3;
+
+2)
+  Summer
+  Forward
+  Winter
+
+3)
+
+  Display the name, gender, and age of all dogs that are part Labrador.
+    SELECT name, gender, age
+    FROM dogs
+    WHERE breed LIKE '%labrador%';
+  Display the ids of all dogs that are under 1 year old.
+    SELECT id
+    FROM dogs
+    WHERE age < 1;
+  Display the name and age of all dogs that are female and over 35lbs.
+    SELECT name, age
+    FROM dogs
+    WHERE gender=f AND weight > 35;
+  Display all of the information about all dogs that are not Shepherd mixes.
+    SELECT *
+    FROM dogs
+    WHERE breed NOT LIKE '%shepherd%';
+  Display the id, age, weight, and breed of all dogs that are either over 60lbs or Great Danes.
+    SELECT id, age, weight, breed
+    FROM dogs
+    WHERE weight > 60 OR breed = 'great dane';
+
+4)
