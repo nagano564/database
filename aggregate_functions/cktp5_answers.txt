@@ -1,0 +1,9 @@
+1)
+  SUM: if you want to add the values of your inventory
+  AVG: if you want to average value of your inventory
+  COUNT: if you want to know how many items in your inventory
+  MIN: if you want to find the cheapest item in your inventory
+  MAX: if you want to find the most expensive item in your inventory
+
+2)
+  
