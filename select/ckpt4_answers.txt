@@ -32,18 +32,25 @@
     WHERE weight > 60 OR breed = 'great dane';
 
 4)
-  SELECT name, adoption_date FROM cats;
-    name:	Mushi	adoption_date: 2016-03-22
-    name:	Azul adoption_date: 2016-04-17
-    name:	Victoire adoption_date: 2016-09-01
+  pets=#   SELECT name, adoption_date FROM cats;
+     name   | adoption_date
+  ----------+---------------
+   Seashell |
+    Mushi   | 2016-03-22
+   Azul     | 2016-04-17
+   Victoire | 2016-09-01
+   Nala     |
+  (5 rows)
 
-  SELECT name, age FROM cats;
-    name	    age
-    Mushi	    1
-    Seashell  7
-    Azul		  3
-    Victoire	7
-    Nala	    1
+  pets=#   SELECT name, age FROM cats;
+     name   | age
+  ----------+-----
+   Seashell |   7
+    Mushi   |   1
+   Azul     |   3
+   Victoire |   7
+   Nala     |   1
+  (5 rows)
 
 5)
   Display all the information about all of the available cats.
@@ -52,7 +59,7 @@
   Choose one cat of each age to show to potential adopters.
     SELECT name
     FROM cats
-    WHERE adoption_date = null;
+    WHERE id = 2 OR id = 5;
   Find all of the names of the cats, so you don’t choose duplicate names for new cats.
     SELECT name
     FROM cats;
@@ -65,14 +72,30 @@
    WHERE id != 4, find all items where id is not 4
 
 7)
-  SELECT name FROM cats WHERE gender = ‘F’;
-    name: Seashell
-    name: Nala
-  SELECT name FROM cats WHERE age <> 3;
-    name: Mushi
-    name: Seashell
-    name: Victoire
-    name: Nala
-  SELECT ID FROM cats WHERE name != ‘Mushi’ AND gender = ‘M’;
-    name: Azul
-    name: Victoire
+  If you copy paste the query the backticks produce an erro but if put
+  into single quotes your get
+
+  pets=# SELECT name FROM cats WHERE gender = 'F';
+     name
+  ----------
+   Seashell
+   Nala
+  (2 rows)
+
+  pets=# SELECT name FROM cats WHERE age <> 3;
+     name
+  ----------
+   Seashell
+    Mushi
+   Victoire
+   Nala
+  (4 rows)
+
+  Same issue with the backticks
+  pets=# SELECT ID FROM cats WHERE name != 'Mushi' and gender = 'M';
+   id
+  ----
+    1
+    3
+    4
+  (3 rows)
