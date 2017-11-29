@@ -6,4 +6,57 @@
   MAX: if you want to find the most expensive item in your inventory
 
 2)
-  
+  Find the total of all donations received in the past year.
+    SELECT SUM (amount) FROM donations;
+  Find the total donations over time per donor. (i.e. Tanysha has donated 3 times with the amounts $25, $30, and $50. Her total is $105. )
+    SELECT SUM (amount), donor FROM donations GROUP BY donor;
+  What is the average donation per donor?
+    SELECT AVG (amount) FROM donations;
+  How many donations over $100 have been received?
+    SELECT COUNT(donor) FROM donations WHERE donations > 100;
+  What is the largest donation received in a single instance from a single donor?
+    SELECT MAX (amount) FROM donations;
+  What is the smallest donation we’ve received?
+    SELECT MIN (amount) FROM donations;
+
+3)
+  It will display in the order that you enter what you want it to display
+  SELECT id, SUM (amount) will display id first then the sum next
+
+4)
+  OFFSET will be useful if you want to give members a coupon but only
+  the last 10 members.
+
+5)
+  ORDER BY will return the results in order which will help the user
+  determine top to bottom or visa versa what they are looking for
+
+6)
+  WHERE clause filters individual rows by a given condition, the HAVING
+  clause eliminates entire groups of results with a single comparison.
+  WHERE filters rows before aggregation(GROUP BY); HAVING filters groups
+  after aggregations are preformed
+
+7)
+  SELECT is, SUM (amount) as total FROM payment WHERE total > 200;
+
+8)
+  CREATE TABLE cats (id int, name text, gender text, age int, intake_date date);
+  INSERT INTO cats VALUES (00001,' Mushi','M', 1, '2016-01-09');
+  INSERT INTO cats VALUES (00002,'Seashell','F', 7, '2016-01-09');
+  ALTER TABLE cats ADD COLUMN adoption_date date;
+  UPDATE cats SET adoption_date = '2016-03-22' WHERE id=1;
+  INSERT INTO cats VALUES (00003,'Azul','M', 3, '2016-01-11', '2016-04-17');
+  INSERT INTO cats VALUES (00004,'Victoire','M', 7, '2016-01-11', '2016-09-01');
+  INSERT INTO cats VALUES (00005,'Nala','F', 1, '2016-01-12');
+
+  From the cats table, list all cats organized by intake date.
+    SELECT * FROM cats ORDER BY intake_date;
+  Given an adoptions table with the columns id, date, adopter, cat, and fee, determine the 5 most recent adoptions to be featured as “Happy Tails” on social media.
+    SELECT name FROM adoptions ORDER BY date;
+  There is a potential adopter looking for an adult female cat. In the most efficient way possible, from the Cats table, list all female cats 2 or more years old.
+    SELECT name FROM cats WHERE gender='F' AND age >= 2;
+  From the donations table (described in problem #2), find the top 5 donors with the highest cumulative donation amounts to be honored as “Platinum Donors”.
+    SELECT SUM (amount) AS total, donor FROM donations GROUP BY donor ORDER BY total DESC LIMIT 5;
+  From the donations table (described in problem #2), find donors 6-15 with the next highest cumulative donation amounts to be honored as “Gold Donors”.
+  SELECT SUM (amount) AS total, donor FROM donations GROUP BY donor ORDER BY total DESC LIMIT 5 OFFSET 5;
