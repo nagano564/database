@@ -1,0 +1,131 @@
+NOTES: hogwarts are in the join database
+       employee and shifts are in Julie713 database
+       dogs/adoptions/volunteers are in join
+
+1)
+  JOIN statement will find data that is held in separate data tables
+
+2)
+  CROSS JOIN
+    Will return every combination of rows from table1 and table1. It will result
+    in a table that will contain a row consisting of all columns in table1 and table2.
+    This would be used if all combinations of what a customer could buy and all inventory
+    could be bought by what customer.
+  INNER JOIN
+    This is the default join. It will select row's from table 1 and table 2 where
+    they match the selecting column
+    A real world example would be having a customer table and a Orders table. The
+    customer ID would be the selecting column. The names could be in the customer
+    table and what they order could be in the Orders table. You can see the name of
+    the customer and what they ordered with the inner join statement.
+  LEFT OUTER JOIN
+    This selects all rows from table1 on the left, the rows from table2 on the
+    right only if they match.
+    A real world example could be if you wanted to see all the customers from customer
+    table(table1) and what they ordered(table2) listed. You would join them with the
+    customer ID.
+  RIGHT OUTER JOIN
+    This is the opposite of LEFT OUTER JOIN. This selects all rows from table2 and
+    only rows from table1 if they match.
+    A real world example would be if ordered item was given away so no customer was
+    linked to it but you want to list all items in you inventory you could use this
+    statement and it would be listed without a customer.
+  FULL OUTER JOIN
+    All rows from both tables matching them if there is a match on the selecting column.
+    Combination of left and right join.
+    You want to see all the data from customers and inventory even if the customer
+    didn't buy anything or the item was given away and doesn't have a "customer"
+
+3)
+  Primary Key is a unique identifier for each row in a database table
+    An customer_id would be a primary key
+
+  Foreign key is used to link to tables together. A foreign key is a field in one
+  table that refers to the primary key in another table
+    Foreign key could be the customer_id in a order table it would reference
+    customer_id in a customer table
+
+4)
+  Aliasing is technique of abbreviation giving a table an abbreviation so you
+  don't have to type out the whole table name in a query
+
+5)
+  SELECT p.name, c.salary, c.vacation_days FROM professor AS p
+  JOIN compensation AS c ON p.id = c.professor_id;
+
+6)
+  NATURAL JOIN will create an implicit join based on common column names.
+  If you have customer_id identically named in both your customer table
+  and order table you could use NATURAL JOIN.
+
+7)
+  CREATE TABLE employee (employee_id integer, name text);
+  INSERT INTO employee VALUES ('1', 'Kenny')
+  INSERT INTO employee VALUES ('2', 'Chris')
+  INSERT INTO employee VALUES ('3', 'Julie')
+  INSERT INTO employee VALUES ('4', 'Matt')
+  INSERT INTO employee VALUES ('5', 'Ashley')
+  INSERT INTO employee VALUES ('6', 'Sam')
+
+  CREATE TABLE shift (shift_id integer, hours text, employee_id integer DEFAULT null);
+  INSERT INTO shift VALUES ('1','9AM-5PM');
+  INSERT INTO shift VALUES ('2','5PM-12AM');
+  INSERT INTO shift VALUES ('3','12AM-9AM');
+
+  List all employees and all shifts.
+   SELECT *
+   FROM employee
+   FULL OUTER JOIN shift
+   ON employee.employee_id = shift.employee_id;
+  Create a list of all possible schedules.
+    SELECT * FROM employee CROSS JOIN shift;
+
+8)
+  CREATE TABLE volunteers (id integer, first_name text, last_name text, address text,
+  phone_number VARCHAR, available_to_foster boolean, foster_id integer);
+  INSERT INTO volunteers VALUES ('1', 'Kenny', 'N', 'NYC', '5167778888','t', '101');
+  INSERT INTO volunteers VALUES ('2', 'Julie', 'N', 'NY', '5163338888','f', '102');
+  INSERT INTO volunteers VALUES ('3', 'Matt', 'N', 'QUEENS', '5162228888','f', '103');
+  INSERT INTO volunteers VALUES ('4', 'Chris', 'N', 'BRONX', '5161118888','t', '104');
+
+
+  CREATE TABLE adoptions (id integer, first_name text, last_name text, address text,
+  phone_number VARCHAR);
+  INSERT INTO adoptions VALUES ('2', 'Julie', 'N', 'NY', '5163338888');
+  INSERT INTO adoptions VALUES ('3', 'Matt', 'N', 'QUEENS', '5162228888');
+
+  Create a list of all volunteers. If the volunteer is fostering a dog, include each dog as well.
+    ALTER TABLE volunteers ADD COLUMN fostering_dog boolean;
+    ALTER TABLE volunteers ADD COLUMN dog_name text;
+    UPDATE volunteers SET fostering_dog='t' WHERE available_to_foster='f';
+    UPDATE volunteers SET dog_name='fido' WHERE id=2;
+    UPDATE volunteers SET dog_name='pluto' WHERE id=3;
+    SELECT * FROM volunteers;
+  List the adopter’s name and the pet’s name for each animal adopted within the past month to be displayed as a ‘Happy Tail’ on social media.
+    CREATE TABLE dogs (id integer, foster_id integer, dog_name text, date_adopted date);
+    INSERT INTO dogs VALUES (1, 102, 'fido', '2017-12-01');
+    INSERT INTO dogs VALUES (2, 103, 'pluto', '2017-01-01');
+    INSERT INTO dogs(id, dog_name) VALUES (3, 'matcha');
+    INSERT INTO dogs(id, dog_name) VALUES (4, 'scooby');
+    ALTER TABLE adoptions ADD COLUMN foster_id integer;
+    UPDATE adoptions SET foster_id=102 WHERE id=2;
+    UPDATE adoptions SET foster_id=103 WHERE id=3;
+
+    SELECT adoptions.first_name, dogs.dog_name, dogs.date_adopted FROM adoptions
+    JOIN dogs ON adoptions.foster_id = dogs.foster_id
+    WHERE date_adopted > CURRENT_DATE - INTERVAL '4 months';
+
+  Create a list of adopters who have not yet chosen a dog to adopt and generate all possible combinations of adopters and available dogs.
+    UPDATE dogs SET foster_id=000 WHERE id=4;
+    UPDATE dogs SET foster_id=000 WHERE id=3;
+    SELECT volunteers.first_name, dogs.dog_name FROM volunteers CROSS JOIN dogs WHERE available_to_foster='t' AND dogs.foster_id= 0;
+
+  Display a list of all cats and all dogs who have not been adopted.
+    SELECT * FROM dogs WHERE foster_id=0;
+
+  Create a list of volunteers who are available to foster. If they currently are fostering a dog, include the dog. Also include all dogs who are not currently in foster homes.
+  SELECT volunteers.first_name, dogs.dog_name, volunteers.fostering_dog FROM volunteers FULL OUTER JOIN dogs ON volunteers.foster_id = dogs.foster_id
+  WHERE available_to_foster='t' OR dogs.foster_id=0;
+
+9)
+  
