@@ -1,6 +1,7 @@
 NOTES: hogwarts are in the join database
        employee and shifts are in Julie713 database
        dogs/adoptions/volunteers are in join
+       question 10 tables in join db
 
 1)
   JOIN statement will find data that is held in separate data tables
@@ -128,4 +129,52 @@ NOTES: hogwarts are in the join database
   WHERE available_to_foster='t' OR dogs.foster_id=0;
 
 9)
-  
+  CREATE TABLE cats (id integer, name text, gender text, age integer, intake_date dat
+  e, adoption_date date);
+
+  CREATE TABLE adopted (id integer, adopter text, cat text, dog text, fee numeric, date date);
+  INSERT INTO cats VALUES (1, 'Seashell', 'M', 2,'2017-09-09', '2017-10-01');
+  INSERT INTO adopted VALUES (1, 'Kenny', 'Yes', 'No', 20, '2017-10-01');
+
+  SELECT adopted.adopter, cats.name FROM adopted JOIN cats ON adopted.id = cats.id;
+
+  CREATE TABLE adopt_dogs (id integer, name text, gender text, age integer, weight integer, intake_date date, breed text, in_foster boolean);
+
+10)
+  CREATE TABLE books (isbn text, title text, author text);
+  CREATE TABLE transactions(id integer, checked_out_date date, checked_in_date date, user_id integer, isbn text);
+  CREATE TABLE holds (id integer, isbn text, user_id integer, rank text, date date);
+  CREATE TABLE patrons (id integer, name text, fine_amount integer);
+
+  To discern if the library should buy more copies of a given book, please provide the names and position,
+  in order, of all of the patrons waiting in line for Harry Potter and the Sorcerer’s Stone.
+    INSERT INTO books VALUES (978870031625, 'Harry Potter and the Sorcerer’s Stone', 'JK Rowling');
+    INSERT INTO holds VALUES (1,'978870031625', 101, 'standard', '2017-03-02');
+    INSERT INTO holds VALUES (2,'978870031625', 103, 'standard', '2017-03-04');
+    INSERT INTO holds VALUES (3,'978870031625', 104, 'standard', '2017-03-04');
+    SELECT h.user_id, b.title FROM holds AS h JOIN books AS b ON h.isbn=b.isbn;
+  Make a list of all book titles and denote whether or not a copy of that book is checked out.
+    INSERT INTO books VALUES('Javascript', 'ORielly', '1234');
+    INSERT INTO books VALUES('Javascript is Fun', 'Kenny', '1233');
+    INSERT INTO books VALUES('Ruby for Beginners', 'ORielly', '1236');
+    INSERT INTO transactions VALUES(1, '2017-12-02', null, 101, '1234');
+    INSERT INTO transactions VALUES(1, '2017-12-02', null, 101, '1233');
+
+    SELECT * FROM books LEFT OUTER JOIN transactions ON books.isbn = transactions.isbn;
+
+  In an effort to learn which books take longer to read, the librarians would like you to create
+  a list of total checked out time by book name in the past month.
+    SELECT b.title, t.checked_out_date
+    FROM books AS b
+    JOIN transactions AS t
+    ON b.isbn = t.isbn
+    WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '1 month';
+
+  In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
+    SELECT b.title, t.checked_out_date FROM books AS b JOIN transactions AS t ON b.isbn = t.isbn WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 years';
+  List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
+    ALTER TABLE patrons ADD COLUMN user_id integer;
+      INSERT INTO patrons VALUES (1, 'Kenny', 0, 101);
+      INSERT INTO patrons VALUES (2, 'Julie', 1, 105);
+      INSERT INTO patrons VALUES (3, 'Cyle', 4, 107);
+    SELECT p.name, t.id FROM patrons AS p LEFT JOIN transactions AS t ON p.user_id = t.user_id;
