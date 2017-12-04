@@ -1,0 +1,50 @@
+Notes: Question 1 in hotel database
+
+1)
+  Find a guest who exists in the database and has not booked a room.
+    createdb hotel
+    psql hotel
+    CREATE TABLE guest (guest_id integer, first_name text, last_name text, phone_number text, email text, address text);
+    CREATE TABLE rooms (room_number integer, floor_number integer, price_per_night integer);
+    CREATE TABLE bookings (booking_id integer, check_in date, check_out date, room_number integer, guest_id integer);
+
+    INSERT INTO guest VALUES (101, 'Ken', 'N', '5161234567', 'ken@bloc.com', 'NYC');
+    INSERT INTO guest VALUES (102, 'Julie', 'Y', '2221234567', 'Julie@bloc.com', 'NY');
+    INSERT INTO guest VALUES (103, 'Cyle', 'A', '5161234444', 'Cyle@bloc.com', 'NYC');
+    INSERT INTO guest VALUES (104, 'Matt', 'B', '5111234567', 'Matt@bloc.com', 'Brooklyn');
+    INSERT INTO guest VALUES (105, 'James', 'C', '5161234567', 'James@bloc.com', 'Queens');
+
+    INSERT INTO rooms VALUES (101, 1, 100);
+    INSERT INTO rooms VALUES (102, 1, 200);
+    INSERT INTO rooms VALUES (103, 1, 200);
+    INSERT INTO rooms VALUES (201, 2, 100);
+    INSERT INTO rooms VALUES (202, 2, 200);
+    INSERT INTO rooms VALUES (203, 2, 200);
+    INSERT INTO rooms VALUES (301, 3, 300);
+    INSERT INTO rooms VALUES (302, 3, 300);
+    INSERT INTO rooms VALUES (303, 3, 300);
+
+
+    ????didn't enter into db?????
+    INSERT INTO bookings VALUES (1, '2017-12-01', '2017-12-04', 101, 101);
+    INSERT INTO bookings VALUES (2, '2018-12-01', '2018-12-04', 201, 101);
+    INSERT INTO bookings VALUES (3, '2017-12-01', '2017-12-04', 202, 103);
+    INSERT INTO bookings VALUES (4, '2017-12-01', '2017-12-04', 301, 102);
+    INSERT INTO bookings VALUES (5, '2017-12-01', '2017-12-04', 101, 105);
+    INSERT INTO bookings VALUES (6, '2017-12-01', '2017-12-04', 201, 105);
+    INSERT INTO bookings VALUES (7, '2017-12-01', '2017-12-04', 303, 101);
+    INSERT INTO bookings VALUES (8, '2017-12-01', '2017-12-04', 103, 104);
+    INSERT INTO bookings VALUES (9, '2017-12-01', '2017-12-04', 102, 104);
+    INSERT INTO bookings VALUES (10, '2017-12-01', '2017-12-04', 202, 103);
+    INSERT INTO bookings VALUES (11, '2017-12-01', '2017-12-04', 201, 102);
+    INSERT INTO bookings VALUES (12, '2017-12-01', '2017-12-04', 301, 102);
+    INSERT INTO bookings VALUES (13, '2017-12-01', '2017-12-04', 302, 102);
+
+
+
+
+
+
+  Find bookings for a guest who has booked two rooms for the same dates.
+  Find bookings for a guest who has booked one room several times on different dates.
+  Count the number of unique guests who have booked the same room.
