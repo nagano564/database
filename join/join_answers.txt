@@ -141,7 +141,7 @@ NOTES: hogwarts are in the join database
   CREATE TABLE adopt_dogs (id integer, name text, gender text, age integer, weight integer, intake_date date, breed text, in_foster boolean);
 
 10)
-  CREATE TABLE books (isbn text, title text, author text);
+  CREATE TABLE books (title text, author text, isbn text);
   CREATE TABLE transactions(id integer, checked_out_date date, checked_in_date date, user_id integer, isbn text);
   CREATE TABLE holds (id integer, isbn text, user_id integer, rank text, date date);
   CREATE TABLE patrons (id integer, name text, fine_amount integer);
@@ -150,9 +150,8 @@ NOTES: hogwarts are in the join database
   in order, of all of the patrons waiting in line for Harry Potter and the Sorcerer’s Stone.
     INSERT INTO books VALUES (978870031625, 'Harry Potter and the Sorcerer’s Stone', 'JK Rowling');
     INSERT INTO holds VALUES (1,'978870031625', 101, 'standard', '2017-03-02');
-    INSERT INTO holds VALUES (2,'978870031625', 103, 'standard', '2017-03-04');
-    INSERT INTO holds VALUES (3,'978870031625', 104, 'standard', '2017-03-04');
-    SELECT h.user_id, b.title FROM holds AS h JOIN books AS b ON h.isbn=b.isbn;
+    INSERT INTO holds VALUES (2,'978870031625', 103, 'standard', '2017-05-01');
+    SELECT h.user_id, b.title, h.date FROM holds AS h JOIN books AS b ON h.isbn=b.isbn GROUP BY date, h.user_id, b.title;
   Make a list of all book titles and denote whether or not a copy of that book is checked out.
     INSERT INTO books VALUES('Javascript', 'ORielly', '1234');
     INSERT INTO books VALUES('Javascript is Fun', 'Kenny', '1233');
@@ -164,14 +163,17 @@ NOTES: hogwarts are in the join database
 
   In an effort to learn which books take longer to read, the librarians would like you to create
   a list of total checked out time by book name in the past month.
-    SELECT b.title, t.checked_out_date
+    SELECT b.title, SUM (t.checked_in_date - t.checked_out_date) AS total_time
     FROM books AS b
     JOIN transactions AS t
     ON b.isbn = t.isbn
-    WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '1 month';
+    WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '1 month'
+    GROUP BY b.title;
 
   In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
-    SELECT b.title, t.checked_out_date FROM books AS b JOIN transactions AS t ON b.isbn = t.isbn WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 years';
+    SELECT books.title, MAX (checked_out_date) FROM transactions NATURAL JOIN books GROUP BY title HAVING MAX (checked_out_date) < CURRENT_DATE - INTERVAL '5 years';
+
+
   List all of the library patrons. If they have one or more books checked out, correspond the books to the patrons.
     ALTER TABLE patrons ADD COLUMN user_id integer;
       INSERT INTO patrons VALUES (1, 'Kenny', 0, 101);
