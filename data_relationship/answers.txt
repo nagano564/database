@@ -61,7 +61,19 @@ Notes: Question 1 in hotel database
   Find all students who have taken a particular class.
 
   Count the number of each grade (using letter grades A-F) earned in a particular class.
-    
+
   Find class names and the total number of students who have taken each class in the list.
 
   Find the class taken by the largest number of students.
+
+
+
+
+  SELECT g.first_name, count(b.check_in)
+      FROM bookings b
+      LEFT OUTER JOIN guest g
+          ON (g.guest_id = b.guest_id)
+       JOIN bookings b2
+          ON (b.check_in = b2.check_in)
+      GROUP BY g.first_name
+      HAVING count(b.check_in) = 2;
