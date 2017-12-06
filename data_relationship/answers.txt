@@ -24,27 +24,44 @@ Notes: Question 1 in hotel database
     INSERT INTO rooms VALUES (302, 3, 300);
     INSERT INTO rooms VALUES (303, 3, 300);
 
-
-    ????didn't enter into db?????
     INSERT INTO bookings VALUES (1, '2017-12-01', '2017-12-04', 101, 101);
-    INSERT INTO bookings VALUES (2, '2018-12-01', '2018-12-04', 201, 101);
-    INSERT INTO bookings VALUES (3, '2017-12-01', '2017-12-04', 202, 103);
+    INSERT INTO bookings VALUES (2, '2017-12-01', '2017-12-04', 201, 101);
+    INSERT INTO bookings VALUES (3, '2017-12-01', '2017-12-04', 202, 101);
     INSERT INTO bookings VALUES (4, '2017-12-01', '2017-12-04', 301, 102);
-    INSERT INTO bookings VALUES (5, '2017-12-01', '2017-12-04', 101, 105);
-    INSERT INTO bookings VALUES (6, '2017-12-01', '2017-12-04', 201, 105);
-    INSERT INTO bookings VALUES (7, '2017-12-01', '2017-12-04', 303, 101);
-    INSERT INTO bookings VALUES (8, '2017-12-01', '2017-12-04', 103, 104);
-    INSERT INTO bookings VALUES (9, '2017-12-01', '2017-12-04', 102, 104);
+    INSERT INTO bookings VALUES (5, '2018-01-01', '2018-02-04', 101, 105);
+    INSERT INTO bookings VALUES (6, '2018-12-01', '2018-12-08', 201, 105);
+    INSERT INTO bookings VALUES (7, '2018-12-01', '2018-12-04', 303, 101);
+    INSERT INTO bookings VALUES (8, '2018-06-01', '2018-06-04', 103, 102);
+    INSERT INTO bookings VALUES (9, '2017-12-01', '2017-12-04', 102, 103);
     INSERT INTO bookings VALUES (10, '2017-12-01', '2017-12-04', 202, 103);
-    INSERT INTO bookings VALUES (11, '2017-12-01', '2017-12-04', 201, 102);
+    INSERT INTO bookings VALUES (11, '2018-06-01', '2018-06-04', 201, 102);
     INSERT INTO bookings VALUES (12, '2017-12-01', '2017-12-04', 301, 102);
     INSERT INTO bookings VALUES (13, '2017-12-01', '2017-12-04', 302, 102);
 
-
-
-
-
+    SELECT g.first_name FROM guest g LEFT JOIN bookings b ON g.guest_id = b.guest_id WHERE b.guest_id IS NULL;
 
   Find bookings for a guest who has booked two rooms for the same dates.
+    SELECT g.first_name, b.booking_id FROM guest g JOIN bookings b ON g.guest_id = b.guest_id
+
   Find bookings for a guest who has booked one room several times on different dates.
+    SELECT g.first_name, b.booking_id, b.check_in FROM guest g JOIN bookings b ON g.guest_id = b.guest_id GROUP BY g.first_name, b.booking_id;
   Count the number of unique guests who have booked the same room.
+    SELECT DISTINCT g.first_name, b.booking_id, b.room_number FROM guest g GROUP BY b.room_number JOIN bookings b ON g.guest_id = b.guest_id;
+
+    SELECT g.first_name, count(b.check_in)
+    FROM bookings b
+    LEFT OUTER JOIN guest g
+        ON (g.guest_id = b.guest_id)
+    LEFT OUTER JOIN bookings b2
+        ON (b.check_in = b2.check_in)
+    GROUP BY g.first_name, b.check_in
+    HAVING count(b.check_in) > 2;
+
+3)
+  Find all students who have taken a particular class.
+
+  Count the number of each grade (using letter grades A-F) earned in a particular class.
+    
+  Find class names and the total number of students who have taken each class in the list.
+
+  Find the class taken by the largest number of students.
