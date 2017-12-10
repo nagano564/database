@@ -1,0 +1,23 @@
+1)
+  The benefits of data normalization are searching, sorting and creating
+  indexes is faster since tables are narrower and more rows fit on a data page.
+  A database of customer, sales items and transactions could benefit from data
+  normalization. Instead of having all of these things in one table breaking it
+  down in many tables would make queries faster and less prone to mistakes.
+
+2)
+  1NF: Each cell must be a single value. If someone buys multiple items per
+  transaction each item must be it's own row.
+
+  2NF: All attributes depend on the key. If the key is customer_id and total
+  sales is listed in the same row they must be separated since the total sales
+  id not dependent on the customer_id.
+
+  3NF: All columns can be determined only by the key in the table and no other
+  column. So if the table has shirt listed and shirt company list. The shirt
+  since the shirt company isn't determined by the key of customer_id it needs to
+  be in it's own table of CREATE TABLE company (item, company).
+
+  BCNF:
+
+3)
