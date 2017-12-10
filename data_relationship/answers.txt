@@ -123,10 +123,17 @@ Notes: Question 1 in hotel database
     SELECT COUNT(grade), grade FROM grades WHERE class_id=1001 GROUP BY grade;
 
   Find class names and the total number of students who have taken each class in the list.
-    SELECT c.class_name, COUNT (g.student_id) FROM grades g JOIN classes c ON g.class_id = c.class_id GROUP BY c.class_name;
+    SELECT c.class_name, COUNT (g.student_id)
+    FROM grades g JOIN classes c
+      ON g.class_id = c.class_id
+    GROUP BY c.class_name;
 
   Find the class taken by the largest number of students.
-    SELECT c.class_name, COUNT (g.student_id) FROM grades g JOIN classes c ON g.class_id = c.class_id GROUP BY c.class_name LIMIT 1;
+    SELECT c.class_name, COUNT (g.student_id)
+    FROM grades g JOIN classes c
+      ON g.class_id = c.class_id
+    GROUP BY c.class_name
+    ORDER BY COUNT DESC LIMIT 1;
 
 
 
@@ -152,3 +159,13 @@ Notes: Question 1 in hotel database
     # Field documentation comment 2
     first_name text # Field documentation comment 3
     email text
+
+    SELECT
+      counts.class_name,
+      MAX(counts.student_count)
+    FROM (SELECT
+      c.class_name,
+      COUNT(g.student_id) student_count
+    FROM grades g
+    JOIN classes c ON g.class_id = c.class_id
+    GROUP BY (c.class_name) counts;
