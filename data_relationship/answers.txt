@@ -59,24 +59,11 @@ Notes: Question 1 in hotel database
     HAVING count(DISTINCT check_in) > 1;
 
   Count the number of unique guests who have booked the same room.
-    SELECT COUNT(g.first_name), b.room_number, g.first_name
+    SELECT COUNT(DISTINCT g.first_name), b.room_number
     FROM guest g
     JOIN bookings b
       ON g.guest_id = b.guest_id
-    JOIN bookings b2
-        ON b.room_number = b2.room_number AND g.guest_id = b2.guest_id
-    WHERE b.room_number = b2.room_number AND b.booking_id != b2.booking_id
-    GROUP BY b.room_number, g.first_name;
-
-    *** what I think is right***
-
-    SELECT COUNT(g.first_name), b.room_number
-    FROM guest g
-    JOIN bookings b
-      ON g.guest_id = b.guest_id
-      GROUP BY b.room_number;
-
-    *** what I think is right******
+    GROUP BY b.room_number;
 
 3)
 
