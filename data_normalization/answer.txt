@@ -18,6 +18,22 @@
   since the shirt company isn't determined by the key of customer_id it needs to
   be in it's own table of CREATE TABLE company (item, company).
 
-  BCNF:
+  BCNF: For every dependency of X -> Y, X must be a superkey of the table. A
+  superkey is a set of attributes within a table whose values can be used to uniquely
+  identify all other attributes.
+  The all attributes must link to the primary key and only the primary key.
 
 3)
+  See excel file
+
+4)
+  Potential disadvantages of normalization is readability. You can not understand
+  what class or grade a student got by looking at just one table. More tables will
+  need to be created opposed to the original first one. Queries will become more
+  difficult because you will need multiple join tables to find the information you
+  are trying to obtain.
+
+5)
+  See excel file denormal
+  I think denormalization to this point is enough that it is broken down but still
+  easy to read which results in making queries easier.
