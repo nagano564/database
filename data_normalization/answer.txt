@@ -37,3 +37,7 @@
   See excel file denormal
   I think denormalization to this point is enough that it is broken down but still
   easy to read which results in making queries easier.
+
+6)
+  If you changed a subject in one table you would have to change it in multiple
+  tables added an extra step.
