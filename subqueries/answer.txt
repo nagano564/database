@@ -59,12 +59,13 @@ Notes: employees are in Julie713 db
         WHERE EXISTS
         (SELECT dog_name FROM volunteers WHERE fostering_dog = true);
 
-  List the adopter’s name and the pet’s name for each animal adopted within the
+  List the adopter’s name and the pet’s name for each animal fostered within the
   past month to be displayed as a ‘Happy Tail’ on social media.
 
-    SELECT d.dog_name, a.first_name
-    FROM dogs d, adoptions a
-    WHERE d.foster_id = a.foster_id AND date_adopted > CURRENT_DATE - INTERVAL '1 months';
+    SELECT first_name, dog_name
+    FROM volunteers
+    WHERE foster_id IN
+      (SELECT foster_id FROM dogs WHERE date_adopted > CURRENT_DATE - INTERVAL '1 months');
 
   Create a list of adopters who have not yet chosen a dog to adopt and generate all possible combinations of adopters and available dogs.
 
