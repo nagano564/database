@@ -1,0 +1,296 @@
+NOTES: Most tables in subqueries database
+       employee and shift in Julie713 database
+
+1)
+  A subquery is a query that is nested inside a SELECT, INSERT, UPDATE, or
+  DELETE statement, or inside another subquery. A subquery can be used anywhere
+  an expression is allowed.
+
+2)
+  Subqueries within the SELECT clause are most often used to retrieve a
+  calculation using an aggregate function, when you do not want the aggregate
+  function to apply to the main query.
+
+3)
+  A subquery can be used to look for things from table A given conditions from
+  table B. When using a subquery with a NOT EXISTS will return NULL. You do not
+  need to worry about returning duplicates. It will also not look through all
+  entries when a condition is met making it a lot faster then JOIN tables.
+
+4)
+  A row constructor is an expression that builds a row using values for its
+  member fields. It will return a row with the attributes that you put into it.
+
+5)
+  If there are no failures but at least one right-hand row yields NULL
+  for the operator's result the result of the comparison will be NULL not true
+
+6)
+  IN: The result of IN is true if any matching subquery row is found otherwise
+  the result is false if no match row is found. If the subquery returns no rows,
+  the result is also false. However if the left hand side evaluates to NULL the
+  result will be NULL
+
+  NOT IN: The subquery must return exactly 0 matching rows.
+
+  ANY & SOME: Are equivalent. Each is a boolean operator returning true or false
+  depending on whether or not one or more subquery rows is found to match the
+  given expression. Both return true provided that at least one matching row is
+  found
+
+  ALL: For all to return true either every result returned by the subquery must
+  match the given condition or the subquery must return no rows.
+
+  EXISTS: if the subquery returns at least one row the EXISTS returns true.
+  Otherwise it returns false.
+
+  NOT EXISTS: If the subquery does not return at least one row the EXISTS
+  returns true, otherwise it returns false.
+
+7)
+
+  Create a list of all possible schedules.
+    SELECT e.name, s.hours FROM (SELECT * FROM employees) e, shift s;
+
+8)
+
+  CREATE TABLE dogs (id integer, name text, gender text, age integer, weight integer, intake_date date, breed text, in_foster boolean, foster_id integer);
+  INSERT INTO dogs VALUES (1, 'Matcha', 'F', 1, 20, '11/20/2017', 'Shiba', True, 101);
+  INSERT INTO dogs VALUES (2, 'Scooby', 'M', 6, 15, '12/01/2017', 'Lab', False);
+  INSERT INTO dogs VALUES (3, 'Pluto', 'F', 1, 21, '09/20/2017', 'Yorkie', False);
+  INSERT INTO dogs VALUES (4, 'Spot', 'M', 3, 8, '12/28/2017', 'Shiba', True, 104);
+  INSERT INTO dogs VALUES (5, 'Lucky', 'F', 2, 12, '11/22/2017', 'Pitbull', False);
+
+  CREATE TABLE cats (id integer, name text, gender text, age integer, intake_date date, adoption_date date);
+  INSERT INTO cats VALUES (1, 'Garfield', 'M', 2, '11/20/2017');
+  INSERT INTO cats VALUES (2, 'Seashell', 'F', 2, '12/20/2017', '01/01/2018');
+  INSERT INTO cats VALUES (3, 'Happy', 'M', 1, '09/20/2017');
+  INSERT INTO cats VALUES (4, 'Simba', 'F', 4, '11/20/2017', '11/28/2017');
+  INSERT INTO cats VALUES (5, 'Tigger', 'M', 2, '12/15/2017', '12/25/2017');
+
+  CREATE TABLE adoptions (id integer, adopter text, cat_name text, dog_name text, fee integer, date date);
+  INSERT INTO adoptions VALUES(1, 'James', 'Seashell', '', 30, '01/01/2018');
+  INSERT INTO adoptions VALUES(2, 'Brett', 'Simba', '', 30, '11/28/2017');
+  INSERT INTO adoptions VALUES(3, 'Scott', 'Tigger', '', 30, '12/25/2017');
+  INSERT INTO adoptions VALUES(3, 'Sam', '', 'Spot', 30, '09/10/2017');
+  INSERT INTO adoptions VALUES(3, 'Eric', '', 'Lucky', 30, '10/25/2017');
+
+  CREATE TABLE volunteers (id integer, first_name text, last_name text, address text,
+  phone_number VARCHAR, available_to_foster boolean, foster_id integer);
+  INSERT INTO volunteers VALUES ('1', 'Kenny', 'N', 'NYC', '5167778888','t', '101');
+  INSERT INTO volunteers VALUES ('2', 'Julie', 'N', 'NY', '5163338888','f', '102');
+  INSERT INTO volunteers VALUES ('3', 'Matt', 'N', 'QUEENS', '5162228888','f', '103');
+  INSERT INTO volunteers VALUES ('4', 'Chris', 'N', 'BRONX', '5161118888','t', '104');
+  INSERT INTO volunteers VALUES ('5', 'James', 'N', 'LONG ISLAND', '6319273333', 't', null)
+
+  CREATE TABLE adopters (first_name text, last_name text, address text, phone_number VARCHAR);
+  INSERT INTO adopters VALUES ('James', 'K', 'NYC', '6317239876');
+  INSERT INTO adopters VALUES ('Brett', 'K', 'QUEENS', '7187239876');
+  INSERT INTO adopters VALUES ('Scott', 'K', 'LONG ISLAND', '6317239006');
+  INSERT INTO adopters VALUES ('Sam', 'K', 'BRONX', '6317549876');
+  INSERT INTO adopters VALUES ('Eric', 'K', 'NYC', '6317239800');
+  INSERT INTO adopters VALUES ('Kenny', 'K', 'NYC', '6317235876');
+  INSERT INTO adopters VALUES ('Julie', 'K', 'NYC', '5169239876');
+
+  Create a list of all volunteers. If the volunteer is fostering a dog, include
+  each dog as well.
+
+  LEFT OUTER JOIN IN SUBQUERY FORM
+
+  SELECT first_name,
+  (SELECT name FROM dogs d WHERE in_foster=true AND v.foster_id = d.foster_id)
+  FROM volunteers v;
+
+  List the adopter’s name and the pet’s name for each animal fostered within the
+  past month to be displayed as a ‘Happy Tail’ on social media.
+
+    SELECT dog_name, cat_name,
+    (SELECT first_name FROM adopters WHERE first_name = adopter)
+    FROM adoptions
+    WHERE date > CURRENT_DATE - INTERVAL '1 months';
+
+  Create a list of adopters who have not yet chosen a dog to adopt and generate
+  all possible combinations of adopters and available dogs.
+
+    SELECT
+      a.first_name,
+      x.name
+    FROM
+      (SELECT first_name FROM adopters) a,
+      (SELECT name FROM dogs) x
+    WHERE
+      a.first_name NOT IN
+        (SELECT adopter FROM adoptions) AND
+      x.name NOT IN
+        (SELECT dog_name FROM adoptions);
+
+  Display a list of all cats and all dogs who have not been adopted.
+
+  SELECT name FROM cats c
+  WHERE NOT EXISTS
+  (SELECT cat_name FROM adoptions a
+  WHERE c.name = a.cat_name)
+  UNION
+  SELECT name FROM dogs d
+  WHERE NOT EXISTS
+  (SELECT dog_name FROM adoptions a
+  WHERE d.name = a.dog_name);
+
+  Create a list of volunteers who are available to foster. If they currently are fostering a dog,
+  include the dog. Also include all dogs who are not currently in foster homes. FULL OUTER JOIN
+
+    SELECT
+      first_name,
+      (SELECT name FROM dogs d WHERE v.foster_id = d.foster_id) AS fostering,
+      x.name AS need_foster
+    FROM
+      volunteers v,
+      (SELECT name FROM dogs WHERE in_foster = false) x
+    WHERE
+      available_to_foster = true;
+
+  9)
+    Write a query to find the name of the person who adopted Seashell
+    given the tables cats, adoptions, and adopters. All tables are described below
+
+    SELECT first_name FROM adopters WHERE EXISTS
+    (SELECT adopter FROM adoptions WHERE adopters.first_name = adoptions.adopter
+    AND cat_name = 'Seashell');
+
+10)
+  CREATE TABLE books (isbn text, title text, author text);
+  CREATE TABLE transactions(id integer, checked_out_date date, checked_in_date date, user_id integer, isbn text);
+  CREATE TABLE holds (id integer, isbn text, user_id integer, rank text, date date);
+  CREATE TABLE patrons (id integer, name text, fine_amount integer);
+
+  INSERT INTO books VALUES (978870031625, 'Harry Potter and the Sorcerer’s Stone', 'JK Rowling');
+  INSERT INTO books VALUES('1234', 'Javascript', 'ORielly');
+  INSERT INTO books VALUES('1233', 'Javascript is Fun', 'Kenny');
+  INSERT INTO books VALUES('1236', 'Ruby for Beginners', 'ORielly');
+  INSERT INTO books VALUES('5555', 'Forrest Gump', 'Winston Groom')
+
+  INSERT INTO holds VALUES (1,'978870031625', 101, 'standard', '2017-03-02');
+  INSERT INTO holds VALUES (2,'978870031625', 103, 'standard', '2017-03-04');
+  INSERT INTO holds VALUES (3,'978870031625', 104, 'standard', '2017-03-04');
+
+  INSERT INTO transactions VALUES(1, '2017-12-02', null, 101, '1234');
+  INSERT INTO transactions VALUES(1, '2017-12-02', null, 101, '1233');
+  INSERT INTO transactions VALUES(2, '1990-01-02', '1990-02-02', 5555);
+
+  ALTER TABLE patrons ADD COLUMN user_id integer;
+    INSERT INTO patrons VALUES (1, 'Kenny', 0, 101);
+    INSERT INTO patrons VALUES (2, 'Julie', 1, 105);
+    INSERT INTO patrons VALUES (3, 'Cyle', 4, 107);
+
+  To discern if the library should buy more copies of a given book, please
+  provide the names and position, in order, of all of the patrons waiting in
+  line for Harry Potter and the Sorcerer’s Stone.
+
+    JOIN STATEMENT
+    SELECT h.user_id, b.title FROM holds AS h JOIN books AS b ON h.isbn=b.isbn;
+
+    SUBQUERY
+    SELECT h.user_id, (SELECT b.title FROM books b WHERE h.isbn = b.isbn) FROM holds h;
+
+  Make a list of all book titles and denote whether or not a copy of that book
+  is checked out.
+
+    JOIN STATEMENT
+    SELECT * FROM books LEFT OUTER JOIN transactions ON books.isbn = transactions.isbn;
+
+    SUBQUERY
+    SELECT title,
+    (SELECT checked_out_date FROM transactions t WHERE b.isbn = t.isbn)
+    FROM books b;
+
+  In an effort to learn which books take longer to read, the librarians would
+  like you to create a list of total checked out time by book name in the past month.
+
+    JOIN METHOD
+      SELECT b.title, t.checked_out_date
+      FROM books AS b
+      JOIN transactions AS t
+      ON b.isbn = t.isbn
+      WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '1 month';
+
+    SUBQUERY METHOD
+
+      SELECT t.checked_out_date,
+      (SELECT b.title FROM books b
+      WHERE b.isbn = t.isbn)
+      FROM transactions t
+      WHERE t.checked_out_date > CURRENT_DATE - INTERVAL '1 month';
+
+  In order to learn which items should be retired, make a list of all books that have not been checked out in the past 5 years.
+    JOIN METHOD
+    SELECT b.title, t.checked_out_date
+    FROM books AS b
+    JOIN transactions AS t ON b.isbn = t.isbn
+    WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 years';
+
+    SUBQUERY METHOD
+
+    SELECT t.checked_out_date,
+    (SELECT b.title
+    FROM books b
+    WHERE b.isbn = t.isbn)
+    FROM transactions t
+    WHERE t.checked_out_date < CURRENT_DATE - INTERVAL '5 years';
+
+  List all of the library patrons. If they have one or more books checked out,
+  correspond the books to the patrons.
+
+  SELECT p.name, b.title FROM patrons p, books b WHERE user_id IN
+  (SELECT user_id FROM transactions t WHERE checked_in_date is null
+  AND t.user_id = p.user_id;
+
+11)
+  CREATE TABLE airplanes (model text, seat_capacity integer, range integer);
+  INSERT INTO airplanes VALUES ('Boeing 777', 150, 50);
+  INSERT INTO airplanes VALUES ('Airbus', 50, 250);
+  INSERT INTO airplanes VALUES ('C 130', 300, 1000);
+
+  CREATE TABLE flights(flight_number integer, destination text, origin text, company text, distance integer, flight_time text, airplane_model text);
+  INSERT INTO flights VALUES (1045, 'NYC', 'Atlanta', 'Delta', 2800, '10:00 AM', 'Boeing 777');
+  INSERT INTO flights VALUES (1023, 'Dallas', 'NYC', 'Delta', 2300, '05:00 PM', 'Boeing 777');
+  INSERT INTO flights VALUES (1098, 'Columbus', 'Dallas', 'Jet Blue', 1800, '10:00 PM', 'Airbus');
+  INSERT INTO flights VALUES (1011, 'Philadelphia', 'Atlanta', 'American Airlines', 2600, '11:00 AM', 'C 130');
+  INSERT INTO flights VALUES (1022, 'NYC', 'Columbus', 'American Airlines', 800, '12:00 AM', 'Airbus');
+
+  CREATE TABLE flight_transactions(id integer, seats_sold integer, total_revenue integer, total_cost integer, flight_number integer, date date);
+  INSERT INTO flight_transactions VALUES (101, 100, 10000, 6000, 1045, '12/12/2017');
+  INSERT INTO flight_transactions VALUES (102, 90, 12000, 8000, 1023, '01/02/2018');
+  INSERT INTO flight_transactions VALUES (103, 40, 1000, 300, 1098, '10/12/2017');
+  INSERT INTO flight_transactions VALUES (104, 220, 30000, 14000, 1011, '11/12/2017');
+  INSERT INTO flight_transactions VALUES (105, 50, 2000, 4000, 1022, '12/25/2017');
+
+
+  To determine the most profitable airplanes, find all airplane models
+  where each flight has had over 100 paying customers in the past month.
+
+    SELECT airplane_model
+    FROM flights
+    WHERE flight_number IN
+    (SELECT flight_number FROM flight_transactions
+    WHERE seats_sold > 100 AND date > CURRENT_DATE - INTERVAL ' 1 MONTH');
+
+  To determine the most profitable flights, find all destination-origin pairs
+  where 90% or more of the seats have been sold in the past month.
+
+  SELECT destination, origin
+  FROM flights
+  WHERE flight_number IN
+  (SELECT f.flight_number
+  FROM flight_transactions f
+  JOIN flights ft ON f.flight_number = ft.flight_number
+  JOIN airplanes a ON a.model = ft.airplane_model
+  WHERE f.seats_sold / a.seat_capacity >= 0.9
+  AND f.date > CURRENT_DATE - INTERVAL '1 MONTH');
+
+  The airline is looking to expand its presence in the US Southeast and globally.
+  Find the total revenue of any flight arriving at or departing from Atlanta.
+
+    SELECT SUM(total_revenue)
+    FROM flight_transactions
+    WHERE flight_number IN
+    (SELECT flight_number FROM flights WHERE destination = 'Atlanta' OR origin = 'Atlanta');
