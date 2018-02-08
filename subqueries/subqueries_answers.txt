@@ -278,7 +278,7 @@ NOTES: Most tables in subqueries database
     (SELECT flight_number FROM flight_transactions
     WHERE seats_sold > 100 AND date > CURRENT_DATE - INTERVAL ' 1 MONTH');
 
-  To determine the most profitable flights, find all destination-origin pairs
+  In order to determine the most profitable flights, find all destination-origin pairs
   where 90% or more of the seats have been sold in the past month.
 
   SELECT destination, origin
